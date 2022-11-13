@@ -1,8 +1,8 @@
-import { Box, flexbox } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import {
   animate,
-  AnimationOptions,
   motion,
+  useMotionTemplate,
   useMotionValue,
   useTransform,
 } from 'framer-motion';
@@ -32,6 +32,20 @@ function App() {
     const newRotateY = newMouseX - rect.left - rect.width / 2;
     return newRotateY / dampen;
   });
+  const sheenPosition = useTransform<number, number>(
+    [rotateX, rotateY],
+    ([newRotateX, newRotateY]) => {
+      const position: number = newRotateX + newRotateY;
+      return position * Math.abs(position);
+    }
+  );
+  const sheenPercentage = useTransform(sheenPosition, [-25, 25], [-100, 200]);
+  const sheenOpacity = useTransform(
+    sheenPercentage,
+    [-100, 50, 200],
+    [0.01, 0.05, 0.01]
+  );
+  const sheenGradient = useMotionTemplate`linear-gradient(55deg, transparent, rgba(255 255 255 / ${sheenOpacity}) ${sheenPercentage}%, transparent)`;
 
   // handle mouse move on document
   useEffect(() => {
@@ -84,13 +98,16 @@ function App() {
           }}
         />
         {/* CARD WRAPPER */}
-        <Box
+        <motion.div
           ref={cardRef}
-          borderRadius={20}
-          backdropFilter="blur(3px) brightness(120%)"
+          style={{
+            borderRadius: 20,
+            backdropFilter: 'blur(3px) brightness(120%)',
+            backgroundImage: sheenGradient,
+          }}
         >
           <Card />
-        </Box>
+        </motion.div>
       </Box>
     </Box>
   );
