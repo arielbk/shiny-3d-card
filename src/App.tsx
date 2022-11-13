@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react';
+import { Box, flexbox } from '@chakra-ui/react';
 import {
   animate,
   AnimationOptions,
@@ -54,6 +54,7 @@ function App() {
       position="relative"
       width="100vw"
       height="100vh"
+      overflow="hidden"
       style={{ perspective: 1000 }}
     >
       <Box
@@ -65,34 +66,31 @@ function App() {
         }}
         width="100%"
         height="100%"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
       >
         {/* GRID */}
         <Box
           width="100%"
           height="100%"
           backgroundSize="60px 60px"
-          backgroundImage="linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)"
+          backgroundImage="radial-gradient(circle at 1px 1px, white 1px, transparent 0)"
           backgroundPosition="center"
-          opacity="20%"
           position="absolute"
           as={motion.div}
           style={{
             translateZ: -500,
           }}
         />
-        <motion.div
+        {/* CARD WRAPPER */}
+        <Box
           ref={cardRef}
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100%',
-            translateZ: 200,
-          }}
-          drag
+          borderRadius={20}
+          backdropFilter="blur(3px) brightness(120%)"
         >
           <Card />
-        </motion.div>
+        </Box>
       </Box>
     </Box>
   );
