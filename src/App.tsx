@@ -8,10 +8,9 @@ import {
 } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 import Card from './components/Card';
+import DotGrid from './components/DotGrid';
 
 function App() {
-  const cardRef = useRef<HTMLDivElement>(null);
-
   // mouse position
   const mouseX = useMotionValue(
     typeof window !== 'undefined' ? window.innerWidth / 2 : 0
@@ -19,6 +18,11 @@ function App() {
   const mouseY = useMotionValue(
     typeof window !== 'undefined' ? window.innerHeight / 2 : 0
   );
+
+  // a reference to our animated card element
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  // rotation
   const dampen = 40;
   const rotateX = useTransform<number, number>(mouseY, (newMouseY) => {
     if (!cardRef.current) return 0;
@@ -32,20 +36,26 @@ function App() {
     const newRotateY = newMouseX - rect.left - rect.width / 2;
     return newRotateY / dampen;
   });
+
+  // sheen
   const sheenPosition = useTransform<number, number>(
     [rotateX, rotateY],
     ([newRotateX, newRotateY]) => {
       const position: number = newRotateX + newRotateY;
-      return position * Math.abs(position);
+      return position;
     }
   );
-  const sheenPercentage = useTransform(sheenPosition, [-25, 25], [-100, 200]);
+  const sheenPercentPosition = useTransform(
+    sheenPosition,
+    [-5, 5],
+    [-100, 200]
+  );
   const sheenOpacity = useTransform(
-    sheenPercentage,
+    sheenPercentPosition,
     [-100, 50, 200],
     [0.01, 0.05, 0.01]
   );
-  const sheenGradient = useMotionTemplate`linear-gradient(55deg, transparent, rgba(255 255 255 / ${sheenOpacity}) ${sheenPercentage}%, transparent)`;
+  const sheenGradient = useMotionTemplate`linear-gradient(55deg, transparent, rgba(255 255 255 / ${sheenOpacity}) ${sheenPercentPosition}%, transparent)`;
 
   // handle mouse move on document
   useEffect(() => {
@@ -73,31 +83,14 @@ function App() {
     >
       <Box
         as={motion.div}
-        style={{
-          rotateX,
-          rotateY,
-          transformStyle: 'preserve-3d',
-        }}
+        style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
         width="100%"
         height="100%"
         display="flex"
         justifyContent="center"
         alignItems="center"
       >
-        {/* GRID */}
-        <Box
-          width="100%"
-          height="100%"
-          backgroundSize="60px 60px"
-          backgroundImage="radial-gradient(circle at 1px 1px, white 1px, transparent 0)"
-          backgroundPosition="center"
-          position="absolute"
-          as={motion.div}
-          style={{
-            translateZ: -500,
-          }}
-        />
-        {/* CARD WRAPPER */}
+        <DotGrid />
         <motion.div
           ref={cardRef}
           style={{
