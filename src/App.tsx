@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react';
+import styled from '@emotion/styled';
 import {
   animate,
   motion,
@@ -10,6 +10,28 @@ import { useEffect, useRef } from 'react';
 import Card from './components/Card';
 import DotGrid from './components/DotGrid';
 
+const Container = styled.div`
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  perspective: 1000px;
+`;
+
+const RotationWrapper = styled(motion.div)`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform-style: preserve-3d;
+`;
+
+const CardWrapper = styled(motion.div)`
+  border-radius: 20px;
+  backdrop-filter: blur(3px) brightness(120%);
+`;
+
 function App() {
   // mouse position
   const mouseX = useMotionValue(
@@ -19,7 +41,7 @@ function App() {
     typeof window !== 'undefined' ? window.innerHeight / 2 : 0
   );
 
-  // a reference to our animated card element
+  // a reference for our animated card element
   const cardRef = useRef<HTMLDivElement>(null);
 
   // rotation
@@ -74,35 +96,14 @@ function App() {
   }, []);
 
   return (
-    <Box
-      position="relative"
-      width="100vw"
-      height="100vh"
-      overflow="hidden"
-      style={{ perspective: 1000 }}
-    >
-      <Box
-        as={motion.div}
-        style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
-        width="100%"
-        height="100%"
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
+    <Container>
+      <RotationWrapper style={{ rotateX, rotateY }}>
         <DotGrid />
-        <motion.div
-          ref={cardRef}
-          style={{
-            borderRadius: 20,
-            backdropFilter: 'blur(3px) brightness(120%)',
-            backgroundImage: sheenGradient,
-          }}
-        >
+        <CardWrapper ref={cardRef} style={{ backgroundImage: sheenGradient }}>
           <Card />
-        </motion.div>
-      </Box>
-    </Box>
+        </CardWrapper>
+      </RotationWrapper>
+    </Container>
   );
 }
 
