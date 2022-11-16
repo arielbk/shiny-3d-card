@@ -9,7 +9,7 @@ const DotGrid = styled.div`
   background-size: ${SIZE}px ${SIZE}px;
   background-image: radial-gradient(
     circle at 1px 1px,
-    white 1px,
+    white 2px,
     transparent 0
   );
   background-position: center;

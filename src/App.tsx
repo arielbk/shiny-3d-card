@@ -29,7 +29,7 @@ const RotationWrapper = styled(motion.div)`
 
 const CardWrapper = styled(motion.div)`
   border-radius: 20px;
-  backdrop-filter: blur(3px) brightness(120%);
+  backdrop-filter: blur(4px) brightness(120%);
 `;
 
 function App() {
@@ -60,24 +60,24 @@ function App() {
   });
 
   // sheen
-  const sheenPosition = useTransform<number, number>(
+  const diagonalMovement = useTransform<number, number>(
     [rotateX, rotateY],
     ([newRotateX, newRotateY]) => {
       const position: number = newRotateX + newRotateY;
       return position;
     }
   );
-  const sheenPercentPosition = useTransform(
-    sheenPosition,
-    [-5, 5],
-    [-100, 200]
-  );
+  const sheenPosition = useTransform(diagonalMovement, [-5, 5], [-100, 200]);
   const sheenOpacity = useTransform(
-    sheenPercentPosition,
-    [-100, 50, 200],
-    [0.01, 0.05, 0.01]
+    sheenPosition,
+    [-250, 50, 250],
+    [0, 0.05, 0]
   );
-  const sheenGradient = useMotionTemplate`linear-gradient(55deg, transparent, rgba(255 255 255 / ${sheenOpacity}) ${sheenPercentPosition}%, transparent)`;
+  const sheenGradient = useMotionTemplate`linear-gradient(
+    55deg,
+    transparent,
+    rgba(255 255 255 / ${sheenOpacity}) ${sheenPosition}%,
+    transparent)`;
 
   // handle mouse move on document
   useEffect(() => {
