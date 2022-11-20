@@ -1,6 +1,6 @@
 # 3D card animation
 
-![Gif 3D card animation demo](https://res.cloudinary.com/practicaldev/image/fetch/s--MrBIGetF--/c_imagga_scale,f_auto,fl_progressive,h_420,q_66,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/3zs68ee6dhqaous7p6zj.gif)
+![Gif 3D card animation demo](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/3zs68ee6dhqaous7p6zj.gif)
 
 This is an animation effect built with React + TypeScript and Framer Motion.
 
